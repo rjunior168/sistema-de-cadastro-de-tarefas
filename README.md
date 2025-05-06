@@ -10,7 +10,7 @@ Em desenvolvimento
 - JavaScript
 
 ## Time de Desenvolvedores
-- Rodrigo (Você)
+- Rodrigo 
 
 ## Objetivo do Software
 Este é um sistema simples para cadastrar tarefas, visualizá-las em uma lista e marcar como concluídas.
