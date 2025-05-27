@@ -3,64 +3,58 @@ package com.seuprojeto.cadastrodetarefas.controller;
 import com.seuprojeto.cadastrodetarefas.model.Tarefa;
 import com.seuprojeto.cadastrodetarefas.repository.TarefaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/tarefas")
-@CrossOrigin(origins = "*")
 public class TarefaController {
 
     @Autowired
     private TarefaRepository tarefaRepository;
 
-    @GetMapping
-    public List<Tarefa> listarTarefas() {
-        return tarefaRepository.findAll();
+    @GetMapping("/")
+    public String listarTarefas(Model model) {
+        model.addAttribute("tarefas", tarefaRepository.findAll());
+        return "index";
     }
 
-    @PostMapping
-    public Tarefa criarTarefa(@RequestBody Tarefa tarefa) {
-        return tarefaRepository.save(tarefa);
+    @PostMapping("/salvar")
+    public String salvarTarefa(@ModelAttribute Tarefa tarefa) {
+        tarefaRepository.save(tarefa);
+        return "redirect:/tarefas/";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Tarefa> atualizarTarefa(@PathVariable Long id, @RequestBody Tarefa novaTarefa) {
-        Optional<Tarefa> optionalTarefa = tarefaRepository.findById(id);
-        if (optionalTarefa.isPresent()) {
-            Tarefa tarefa = optionalTarefa.get();
-            tarefa.setTitulo(novaTarefa.getTitulo());
-            tarefa.setDescricao(novaTarefa.getDescricao());
-            tarefa.setDataCriacao(novaTarefa.getDataCriacao());
-            tarefa.setConcluida(novaTarefa.isConcluida());
-            return ResponseEntity.ok(tarefaRepository.save(tarefa));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/deletar/{id}")
+    public String deletarTarefa(@PathVariable Long id) {
+        tarefaRepository.deleteById(id);
+        return "redirect:/tarefas/";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarTarefa(@PathVariable Long id) {
-        if (tarefaRepository.existsById(id)) {
-            tarefaRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PutMapping("/{id}/concluir")
-    public ResponseEntity<Tarefa> marcarComoConcluida(@PathVariable Long id) {
-        Optional<Tarefa> optionalTarefa = tarefaRepository.findById(id);
-        if (optionalTarefa.isPresent()) {
-            Tarefa tarefa = optionalTarefa.get();
+    // Método para concluir tarefa via POST (se quiser manter)
+    @PostMapping("/{id}/concluir")
+    public String concluirTarefaPost(@PathVariable Long id) {
+        Optional<Tarefa> tarefaOpt = tarefaRepository.findById(id);
+        if (tarefaOpt.isPresent()) {
+            Tarefa tarefa = tarefaOpt.get();
             tarefa.setConcluida(true);
-            return ResponseEntity.ok(tarefaRepository.save(tarefa));
-        } else {
-            return ResponseEntity.notFound().build();
+            tarefaRepository.save(tarefa);
         }
+        return "redirect:/tarefas/";
+    }
+
+    // Método para concluir tarefa via PUT
+    @PutMapping("/{id}/concluir")
+    public String concluirTarefaPut(@PathVariable Long id) {
+        Optional<Tarefa> tarefaOpt = tarefaRepository.findById(id);
+        if (tarefaOpt.isPresent()) {
+            Tarefa tarefa = tarefaOpt.get();
+            tarefa.setConcluida(true);
+            tarefaRepository.save(tarefa);
+        }
+        return "redirect:/tarefas/";
     }
 }

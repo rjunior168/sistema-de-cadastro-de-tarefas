@@ -1,7 +1,7 @@
+// Tarefa.java (Model)
 package com.seuprojeto.cadastrodetarefas.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 public class Tarefa {
@@ -12,23 +12,14 @@ public class Tarefa {
 
     private String titulo;
     private String descricao;
-    private LocalDate dataCriacao;
-    private boolean concluida = false;
+    private boolean concluida;
 
-    // Construtores
-    public Tarefa() {
-        this.dataCriacao = LocalDate.now();
-    }
-
-    public Tarefa(String titulo, String descricao) {
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.dataCriacao = LocalDate.now();
-    }
-
-    // Getters e Setters
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -47,10 +38,6 @@ public class Tarefa {
         this.descricao = descricao;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
-    }
-
     public boolean isConcluida() {
         return concluida;
     }
@@ -58,8 +45,4 @@ public class Tarefa {
     public void setConcluida(boolean concluida) {
         this.concluida = concluida;
     }
-
-    public void setDataCriacao(LocalDate dataCriacao) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-}
+} 

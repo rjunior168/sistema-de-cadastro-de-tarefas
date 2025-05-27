@@ -9,4 +9,4 @@ public class CadastroDeTarefasApplication {
     public static void main(String[] args) {
         SpringApplication.run(CadastroDeTarefasApplication.class, args);
     }
-}
+} 
