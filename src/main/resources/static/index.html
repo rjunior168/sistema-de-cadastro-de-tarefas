@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Tarefas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f2f2f2;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 300px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    li {
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-left: 5px solid #4CAF50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .remove-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .remove-btn:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cadastro de Tarefas</h1>
+
+  <form id="taskForm">
+    <input type="text" id="taskInput" placeholder="Digite a tarefa..." required>
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <ul id="taskList">
+    <!-- Tarefas aparecerão aqui -->
+  </ul>
+
+  <script>
+    const taskForm = document.getElementById('taskForm');
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+
+    // Carrega as tarefas salvas
+    window.onload = () => {
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks.forEach(task => renderTask(task));
+    };
+
+    // Adiciona tarefa ao HTML
+    function renderTask(taskText) {
+      const li = document.createElement('li');
+      li.textContent = taskText;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = 'Remover';
+      removeBtn.classList.add('remove-btn');
+      removeBtn.onclick = () => {
+        li.remove();
+        removeFromLocalStorage(taskText);
+      };
+
+      li.appendChild(removeBtn);
+      taskList.appendChild(li);
+    }
+
+    // Remove do localStorage
+    function removeFromLocalStorage(taskText) {
+      let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks = tasks.filter(t => t !== taskText);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Ao enviar o formulário
+    taskForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const taskText = taskInput.value.trim();
+
+      if (taskText !== '') {
+        renderTask(taskText);
+
+        // Salva no localStorage
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.push(taskText);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+
+        taskInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
