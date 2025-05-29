@@ -23,4 +23,9 @@ public class TarefaRestController {
     public Tarefa criarTarefa(@RequestBody Tarefa tarefa) {
         return tarefaRepository.save(tarefa);
     }
+
+    @PutMapping
+    public Tarefa atualizarTarefa(@RequestBody Tarefa tarefa) {
+        return tarefaRepository.save(tarefa);
+    }
 }

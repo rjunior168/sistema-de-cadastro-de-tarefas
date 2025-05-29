@@ -1,4 +1,3 @@
-// Tarefa.java (Model)
 package com.seuprojeto.cadastrodetarefas.model;
 
 import jakarta.persistence.*;
@@ -13,6 +12,14 @@ public class Tarefa {
     private String titulo;
     private String descricao;
     private boolean concluida;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.PENDENTE;
+
+    @Enumerated(EnumType.STRING)
+    private Prioridade prioridade = Prioridade.MEDIA; // padrão
+
+    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -45,4 +52,20 @@ public class Tarefa {
     public void setConcluida(boolean concluida) {
         this.concluida = concluida;
     }
-} 
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Prioridade getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(Prioridade prioridade) {
+        this.prioridade = prioridade;
+    }
+}
